@@ -1,3 +1,4 @@
+
 package action;
 import connect.*;
 import java.sql.*;
@@ -20,8 +21,19 @@ public class Person {
 	}
 	public static String getType(String s) {
 		if (s.charAt(0) == 's') return "student";
-		if (s.charAt(0) == 't') return "teacher";
-		if (s.charAt(0) == 'a') return "administration";
+		else if (s.charAt(0) == 't') return "teacher";
+		else if (s.charAt(0) == 'a') return "administration";
+		else return "wrong";
+		//??
+	}
+	public static void getName() {
+		String command = "SELECT name FROM "+ getType(Person.id) +"WHERE ID = '" + Person.id+"';";
+		sqlAction.executeSQL(command);
+		//
+	}
+	public static void setInfo(String info) {
+		String command = "UPDATE "+ getType(Person.id) +"SET information ='"+info+"' WHERE ID = '" + Person.id+"';";
+		sqlAction.executeSQL(command);
 	}
 	
 }
