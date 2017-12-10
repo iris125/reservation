@@ -1,13 +1,13 @@
 CREATE DATABASE project;
 CREATE TABLE administrator(
-  admin_id text(7) not null PRIMARY KEY,
+  admin_id char(7) not null PRIMARY KEY,
   admin_name text,
   admin_password text);
 INSERT INTO administrator values('a000001','admin1','100001');
 INSERT INTO administrator values('a000002','admin1','100002');
 
 CREATE TABLE teacher(
-  t_id text(7) not null PRIMARY KEY,
+  t_id char(7) not null PRIMARY KEY,
   //t000001
   t_name text,
   t_password text,
@@ -18,7 +18,7 @@ CREATE TABLE teacher(
   maxtimeOfMonth int DEFAULT 10000);
   
 CREATE TABLE student(
-  s_id text not null PRIMARYKEY;
+  s_id char(7) not null PRIMARYKEY;
   //s000001
   s_name text,
   s_password text DEFAULT NULL,
