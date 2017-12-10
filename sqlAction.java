@@ -42,7 +42,18 @@ public class sqlAction{
 	      //?????
 	    }
 	  }
-	
+	public static void updateReservation() throws SQLException {
+		Calendar now = Calendar.getInstance();
+		String today = now.YEAR+"-"+now.MONTH+"-"+now.DAY_OF_MONTH;
+		sqlAction s1 = new sqlAction();
+		sqlAction s2 = new sqlAction();
+		s1.executeSQL("SELECT r_id,r_date FROM reservation;");
+		while(s1.rs.next()){
+			String command = "UPDATE reservation SET diatance = DATEDIFF('"+s1.rs.getDate("r_date")
+				+"',"+ today +") WHERE r_id = "+s1.rs.getInt("r_id")+";";
+			s2.executeSQL(command);
+		}
+	}
 	public static int getNum(String columnLabel){
 		int n = 0;
 		try {
