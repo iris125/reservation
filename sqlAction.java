@@ -1,10 +1,11 @@
 package connect;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 public class sqlAction{
-	private static Connection conn = jdbc.conn;
-	private static Statement statement = jdbc.statement;
-	private static ResultSet rs;
+	public static Connection conn = jdbc.conn;
+	public static Statement statement = jdbc.statement;
+	public static ResultSet rs;
 	public static void executeSQL(String sql) {
 	    if (conn == null) {
 	    	//try{
@@ -36,24 +37,12 @@ public class sqlAction{
 	    try {
 	      statement = conn.createStatement();
 	      statement.executeUpdate(sql);
-	      //?????
 	    }
 	    catch (SQLException ex) {
 	      //?????
 	    }
 	  }
-	public static void updateReservation() throws SQLException {
-		Calendar now = Calendar.getInstance();
-		String today = now.YEAR+"-"+now.MONTH+"-"+now.DAY_OF_MONTH;
-		sqlAction s1 = new sqlAction();
-		sqlAction s2 = new sqlAction();
-		s1.executeSQL("SELECT r_id,r_date FROM reservation;");
-		while(s1.rs.next()){
-			String command = "UPDATE reservation SET diatance = DATEDIFF('"+s1.rs.getDate("r_date")
-				+"',"+ today +") WHERE r_id = "+s1.rs.getInt("r_id")+";";
-			s2.executeSQL(command);
-		}
-	}
+
 	public static int getNum(String columnLabel){
 		int n = 0;
 		try {
@@ -72,5 +61,17 @@ public class sqlAction{
 		}
 		return s;
 	}
-
+	public static void updateReservation() throws SQLException {
+		Calendar now = Calendar.getInstance();
+		String today = "'"+now.YEAR+"-"+now.MONTH+"-"+now.DAY_OF_MONTH+"'";
+		String command = "";
+		sqlAction.executeSQL("SELECT r_id,r_date FROM reservation;");
+		while(sqlAction.rs.next()){
+			command += "UPDATE reservation SET distance = DATEDIFF('"+sqlAction.rs.getDate("r_date")
+				+"',"+ today +") WHERE r_id = "+sqlAction.rs.getInt("r_id")+";";
+		}
+		sqlAction.executeSQL(command);
+		command = "UPDATE reservation SET vaild = false WHERE distance <= 0;";
+		sqlAction.executeSQL(command);
+	}
 }
