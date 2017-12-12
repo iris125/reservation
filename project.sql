@@ -8,7 +8,6 @@ INSERT INTO administrator values('a000002','admin1','100002');
 
 CREATE TABLE teacher(
   t_id char(7) not null PRIMARY KEY,
-  //t000001
   t_name text,
   t_password text,
   introduction text DEFAULT NULL,
@@ -19,12 +18,11 @@ CREATE TABLE teacher(
   
 CREATE TABLE student(
   s_id char(7) not null PRIMARYKEY;
-  //s000001
   s_name text,
   s_password text DEFAULT NULL,
   introduction text DEFAULT NULL);
   
-  CREATE TABLE reservation(
+ CREATE TABLE reservation(
    r_id int auto-INCREMENT PRIMARY KEY,
    teacher text(7),
    student text(7) DEFAULT NULL,
@@ -35,8 +33,13 @@ CREATE TABLE student(
    finishTime text,
    length int,
    building text,
-   floor text,
    room text,
    distance int,
    vaild_stu text,
-   isvaild boolean DEFAULT true)
+   isvaild boolean DEFAULT true,
+   wellfinished boolean DEFAULT true);
+  
+CREATE TABLE setting(
+   id int auto-INCREMENT PRIMARY KEY,
+   maxVaildNum int,
+   minRegretDate int);
