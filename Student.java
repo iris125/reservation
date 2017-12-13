@@ -8,11 +8,11 @@ import connect.*;
 public class Student extends Person{
 	public String command = "";
 	public void setName(String name) {
-		command = "UPDATE teacher SET s_name ='"+name+"' WHERE ID = '" + Person.id+"';";
+		command = "UPDATE teacher SET s_name ='"+name+"' WHERE t_id = '" + Person.id+"';";
 		sqlAction.executeSQL(command);
 	}
 	public void setPassword(String password) {
-		command = "UPDATE teacher SET s_password ='"+ password +"' WHERE ID = '" + Person.id+"';";
+		command = "UPDATE teacher SET s_password ='"+ password +"' WHERE t_id = '" + Person.id+"';";
 		sqlAction.executeSQL(command);
 	}
 	public void cancelReservation(int r_id) throws SQLException {
