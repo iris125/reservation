@@ -179,10 +179,24 @@ public class Teacher extends Person{
 			}
 		}
 		return s;
-	}public void addReservation() {
 		
-		command="INSERT INTO reservation(r_id,teacher,student,r_date,r_year,r_month,begintime,finishtime,length,building,room,distance,)";
-				
-	}
-
+	}public void changeAddress(int id,String building,String room){
+		
+		command = String.format("UPDATE reservation SET building='%s' room = '%s' WHERE r_id = %d;",building,room,id);
+		
+		sqlAction.excuteSQL(command);
+	
+	}public void removeStu(int id,String s_id){
+	
+		command = String.format("SELECT vaild_stu FROM reservation WHERE r_id =;",id);
+		
+		sqlAction s = new sqlAction();
+		
+		s.excuteSQL(command);
+		
+		String s = s.rs.fetString("vaild_stu");
+		
+		if(s.contains(s_id)) 
+		
+			s.replace(s_id,"");
 }
