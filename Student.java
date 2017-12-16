@@ -21,37 +21,17 @@ public class Student extends Person{
 		
 	}
 
-	public void setName(String name) throws SQLException {
-
-		command = "UPDATE teacher SET s_name ='"+name+"' WHERE t_id = '" +this.id+"';";
-
-		sqlAction.executeSQL(command);
-
-	}
-
-	public void setPassword(String password) throws SQLException {
-
-		command = "UPDATE teacher SET s_password ='"+ password +"' WHERE t_id = '" + this.id+"';";
-
-		sqlAction.executeSQL(command);
-
-	}
-
 	public void cancelReservation(int r_id) throws SQLException {
 
 		sqlAction.updateReservation();
-
-		command = "SELECT student,distance FROM reservation WHERE r_id = "+ r_id +";";
 		
-		sqlAction s = new sqlAction();
-
-		s.executeSQL(command);
+		Reservation r= new Reservation(r_id);
 
 		int n = Reservation.minRegretDate;//最小允许取消的时间
 
 		boolean test = true;
 
-		if(s.getString("student").equals(this.id) && s.getNum("distance") >= n) {
+		if(r.student.equals(this.id) && r.distance >= n) {
 
 			command = "UPDATE reservation SET student = null WHERE r_id = "+ r_id + ";";
 
@@ -98,32 +78,12 @@ public class Student extends Person{
 	}
 
 	public void setReservation(int r_id) throws SQLException {
-
-		boolean test = false;
-
-		String teacher = "";
-
-		command = "SELECT r_id FROM reservation WHERE isvaild = true AND vaild_stu LIKE '%"
-
-				+ this.id +"%';";
 		
-		sqlAction s = new sqlAction();
-
-		s.executeSQL(command);
-
-		while(s.rs.next()) {
-
-			if(s.rs.getInt("r_id") == r_id) {
-
-				test = true;
-
-				teacher = s.rs.getString("teacher");
-
-				break;
-
-			}
-
-		}
+		Reservation r = new Reservation(r_id);
+		
+		String teacher = r.teacher;
+		
+		boolean test = r.vaild_stu.contains(this.id) ? ture : false; 
 
 		if (testVaild(teacher) && test) {
 
@@ -187,13 +147,18 @@ public class Student extends Person{
 
 		sqlAction.updateReservation();
 
-		command = "SELECT r_id,teacher,r_date,begintime,finishtime,building,room,wellfinished FROM reservation WHERE student='"
-
-				+this.id+"' AND wellfinished = false ORDER BY distance;";
+		command = "SELECT r_id FROM reservation WHERE student='" +this.id+"' AND wellfinished = false ORDER BY distance;";
 
 		sqlAction.executeSQL(command);
 
-		//???
+
+		ArrayList<Reservation> my = new ArrayList<>();
+		
+		while(s.rs.Next()){
+			String r_id = rs.getInt("r_id");
+			Reservation r = new Reservation(r_id);
+			my.add(r);
+		}
 
 	}
 
