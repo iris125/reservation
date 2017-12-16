@@ -132,14 +132,16 @@ public class Teacher extends Person{
 		
 		command="SELECT valid_stu FROM reservation WHERE teacher = '"+this.id+"';";
 		
-		sqlAction.executeSQL(command);
+		sqlAction s = new sqlAction();
 		
-		while(sqlAction.rs.next()) {
+		s.executeSQL(command);
 		
-		if(!sqlAction.rs.getString("student").equals("***")) {
+		while(s.rs.next()) {
+		
+		if(!s.rs.getString("student").equals(null)) {
 			
 			count++;
-			n=n+sqlAction.rs.getString("r_id")+"、";
+			n += s.rs.getString("r_id")+"、";
 			}
 		}
 		return "您本月共有 "+count+" 次预约记录，预约编号分别为： "+n;
@@ -147,19 +149,23 @@ public class Teacher extends Person{
 		
 	}public String RevResult() throws SQLException {
 		
-		command= "SELECT valid_stu FROM reservation WHERE teacher = '"+this.id+"';";
+		command= "SELECT r_id,student,r_date,begintime,finishtime,building,room,diatance,wellfinished FROM reservation WHERE teacher = '"+this.id+"';";
 		
-		sqlAction.executeSQL(command);
+		sqlAction s1 = new sqlAction();
 		
-		String s="预约编号      教师                 预约学生ID   日期                 起始时间   终止时间    预约地点          预约状态\n";
+		s1.executeSQL(command);
 		
-		while(sqlAction.rs.next()) {
+		String s="预约编号      预约学生ID   日期                 起始时间   终止时间    预约地点          预约状态\n";
 		
-		if(!sqlAction.rs.getString("student").equals("***")) {
+		while(s1.rs.next()) {
+		
+		if(!s1.rs.getString("student").equals("***")) {
 			
-			String place=sqlAction.rs.getString(10)+sqlAction.rs.getString(11);
+			String place=sqlAction.rs.getString("building")+sqlAction.rs.getString("room");
 			
 			String state;
+			
+			String date = (String)s1.rs.getDate("r_date");
 			
 			if(sqlAction.rs.getBoolean("wellfinished")&&sqlAction.rs.getInt("distance")<0) {
 				state="已完成";
@@ -169,7 +175,7 @@ public class Teacher extends Person{
 				state="失约";
 			}
 			
-			s+=String.format("%-11d%-13s%-13s%-13s%-9s%-10s%-10s%s\n",sqlAction.rs.getInt(1),sqlAction.rs.getString(2),sqlAction.rs.getString(3),sqlAction.rs.getString(4),sqlAction.rs.getString(7),sqlAction.rs.getString(8),place,state);
+			s += String.format("%-11d%-13s%-13s%-13s%-9s%-10s%-10s%s\n",s1.rs.getInt("r_id"),s1.rs.getString("student"),date,s1.rs.getString("begintime"),s1.rs.getString("finishtime"),place,state);
 			}
 		}
 		return s;
