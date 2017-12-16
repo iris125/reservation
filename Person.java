@@ -1,37 +1,74 @@
 package action;
 
+
+
+import java.sql.SQLException;
+
 import connect.sqlAction;
 
+
+
 public class Person {
-	Person(){		
+
+	Person(){
+		
 	}
 	Person(String id,String password){
+
 		this.id = id;
+
 		this.password = password;
+
 	}
-	public static String id;
-	public static String name;
-	public static String password;
-	public static String inputPassword;
-	public static boolean testRegist() {
+
+	public String id;
+
+	public String name;
+
+	public String password;
+
+	public String inputPassword;
+
+	public boolean testRegist() throws SQLException {
+
 		connect.sqlAction.executeSQL("SELECT PASSWORD FROM" + getType(id) + "WHERE "+ id.charAt(0) +"_id = '"+ id +"';");
+
 		password = connect.sqlAction.getString("password");
+
 		return inputPassword == password ? true:false;
+
 	}
-	public static String getType(String id) {
+
+	public String getType(String id) {
+
 		if (id.charAt(0) == 's') return "student";
+
 		else if (id.charAt(0) == 't') return "teacher";
+
 		else if (id.charAt(0) == 'a') return "administration";
+
 		else return "wrong";
+
 	}
-	public static void getName() {
-		String command = "SELECT name FROM "+ getType(Person.id) +"WHERE ID = '" + Person.id+"';";
+
+	public void getName() throws SQLException {
+
+		String command = "SELECT name FROM "+ getType(this.id) +"WHERE ID = '" + this.id+"';";
+
 		sqlAction.executeSQL(command);
+
 		//
+
 	}
-	public static void setInfo(String info) {
-		String command = "UPDATE "+ getType(Person.id) +"SET information ='"+info+"' WHERE ID = '" + Person.id+"';";
+
+	public void setInfo(String info) throws SQLException {
+
+		String command = "UPDATE "+ getType(this.id) +"SET information ='"+info+"' WHERE ID = '" + this.id+"';";
+
 		sqlAction.executeSQL(command);
+
 	}
+
 	
+
 }
