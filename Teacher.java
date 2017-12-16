@@ -120,7 +120,7 @@ public class Teacher extends Person{
 		
 		String allstu=sqlAction.rs.getString("valid_stu")+" "+s_id+" ";
 		
-		command="UPDATE teacher SET STU='"+ allstu +"' WHERE t_id = '" + this.id+"';";
+		command="UPDATE reservation SET vaild_stu='"+ allstu +"' WHERE r_id = '" + r_id + "';";
 		
 		sqlAction.executeSQL(command);
 		
