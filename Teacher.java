@@ -219,4 +219,50 @@ public class Teacher extends Person{
 		if(s.contains(s_id)) 
 		
 			s.replace(s_id,"");
-}
+}public int getDaysBetween(Calendar d1,Calendar d2) {
+		int days = 0;
+		if(d1.after(d2)){
+			java.util.Calendar swap=d1;
+			d1=d2;
+			d2=swap;
+			days=d2.get(Calendar.DAY_OF_YEAR)-d1.get(Calendar.DAY_OF_YEAR);
+			
+		}return days;
+	}
+	public void addreservation(int year1,int mon1,int day1,int year,int mon,int day,String begintime,String finishtime,int length,String building,String room,String valid_stu) throws ParseException{
+		try {
+			Calendar Nowdate=Calendar.getInstance();
+			Calendar Startdate=Calendar.getInstance();
+			Startdate.set(year1, mon1, day1);
+			Calendar Enddate=Calendar.getInstance();
+			Enddate.set(year, mon, day);
+			int distancee=this.getDaysBetween(Nowdate, Enddate);
+			int days=this.getDaysBetween(Startdate, Enddate);
+			SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd"); 
+			while(true) {
+			Startdate.add(Calendar.DAY_OF_MONTH, 7);
+			if(Enddate.after(Startdate)) {
+			Date cal=Startdate.getTime();
+			String r_date=df.format(cal);
+			year1=Startdate.YEAR;
+			mon1=Startdate.MONTH+1;
+			SimpleDateFormat sdf=new SimpleDateFormat("II:II",java.util.Locale.US);
+			Date begin=sdf.parse(begintime);
+			Date finish=sdf.parse(finishtime);
+			long between =  Math.abs( finish.getTime() - begin.getTime()) / (1000 *60);
+			int num=(int)between/length;
+			for(int i=0;i<num;i++) {
+			
+			command="INSERT INTO reservation(teacher,r_date,r_year,r_month,biginTime,finishTime,length,building,room,distance,valid_stu)VALUES("+this.id+",'"+r_date+"',"+year1+","+mon1+",'"+begintime+"','"+finishtime+"',"+length+",'"+building+"','"+room+"',"+distancee+",'"+valid_stu+"')";
+			
+			}command="INSERT INTO reservation(teacher,r_date,r_year,r_month,biginTime,finishTime,length,building,room,distance,valid_stu)VALUES("+this.id+",'"+r_date+"',"+year1+","+mon1+",'"+begintime+"','"+finishtime+"',"+(between%length)+",'"+building+"','"+room+"',"+distancee+",'"+valid_stu+"')";
+			}else {
+				break;
+			}
+			}
+		}catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
