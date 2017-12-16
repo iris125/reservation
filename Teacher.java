@@ -4,8 +4,6 @@ package action;
 
 import java.sql.SQLException;
 
-
-
 import connect.sqlAction;
 
 
@@ -14,6 +12,7 @@ public class Teacher extends Person{
 
 	public String address;
 
+	
 	public int maxnumOfMonth;
 
 	public int maxtimeOfMonth;
@@ -25,22 +24,39 @@ public class Teacher extends Person{
 	Teacher(String id,String password){
 
 		super(id,password);
+		
+		command = "SELECT maxnumOfMonth,maxtimeOfMonth,maxunllnum,address FROM teacher WHERE t_id = '" + id + "';";
 
+		aqlAction s = new sqlAction();
+		
+		s.executeSQL(command);
+
+		maxnumOfMonth = s.rs.getInt("maxnumOfMonth");
+
+		maxtimeOfMonth = s.rs.getInt("maxtimeOfMonth");
+
+		maxnumOfMonth = s.rs.getInt("maxunllnum");
+		
+		address = s.rs.getString("address");
 	}
 
 	Teacher(String id)throws SQLException {
 		
-		//此处的参数不应只是id，或者另写一个重载的构造方法，用以将老师实例化，new一个老师对象
+		super(id);
 		
-		command = "SELECT maxnumOfMonth,maxtimeOfMonth,maxunllnum FROM teacher WHERE t_id = '" + id + "';";
+		command = "SELECT maxnumOfMonth,maxtimeOfMonth,maxunllnum,address FROM teacher WHERE t_id = '" + id + "';";
 
-		sqlAction.executeSQL(command);
+		aqlAction s = new sqlAction();
+		
+		s.executeSQL(command);
 
-		maxnumOfMonth = sqlAction.rs.getInt("maxnumOfMonth");
+		maxnumOfMonth = s.rs.getInt("maxnumOfMonth");
 
-		maxtimeOfMonth = sqlAction.rs.getInt("maxtimeOfMonth");
+		maxtimeOfMonth = s.rs.getInt("maxtimeOfMonth");
 
-		maxnumOfMonth = sqlAction.rs.getInt("maxunllnum");
+		maxnumOfMonth = s.rs.getInt("maxunllnum");
+		
+		address = s.rs.getString("address");
 
 	}
 
@@ -69,9 +85,7 @@ public class Teacher extends Person{
 	}
 
 	public String getAddress() {
-
 		return address;
-
 	}
 
 	public void setAddress(String address) throws SQLException {
@@ -125,6 +139,7 @@ public class Teacher extends Person{
 		sqlAction.executeSQL(command);
 		
 	}public String CheckNumOfRes() throws SQLException {
+		sqlAction.updateReservation();
 		
 		int count=0;
 		
@@ -149,33 +164,38 @@ public class Teacher extends Person{
 		
 	}public String RevResult() throws SQLException {
 		
-		command= "SELECT r_id,student,r_date,begintime,finishtime,building,room,diatance,wellfinished FROM reservation WHERE teacher = '"+this.id+"';";
+		sqlAction.updateReservation();
+		command= "SELECT r_id FROM reservation WHERE teacher = '"+this.id+"';";
 		
 		sqlAction s1 = new sqlAction();
 		
 		s1.executeSQL(command);
 		
+		ArrayList<Reservation> result = new ArrayList<>();
+		
+		
 		String s="预约编号      预约学生ID   日期                 起始时间   终止时间    预约地点          预约状态\n";
 		
-		while(s1.rs.next()) {
-		
-		if(!s1.rs.getString("student").equals("***")) {
+		while(s1.rs.next()) 
+			result.add(new Reservation(s1.rs.getInt("r_id"));
+				   
+		for(Reservation r : result){
+			if(r.student != null){
+				String place=r.building+r.room;
 			
-			String place=sqlAction.rs.getString("building")+sqlAction.rs.getString("room");
+				String state;
 			
-			String state;
+				String date = r.date;
 			
-			String date = (String)s1.rs.getDate("r_date");
-			
-			if(sqlAction.rs.getBoolean("wellfinished")&&sqlAction.rs.getInt("distance")<0) {
-				state="已完成";
-			}else if(sqlAction.rs.getBoolean("wellfinished")&&sqlAction.rs.getInt("distance")>=0){
-				state="未完成";
-			}else {
-				state="失约";
+				if(r.wellfinished && r.distance < 0) 
+					state="已完成";
+				else if(r.wellfinished && r.distance>=0)
+					state="未完成";
+				else 
+					state="失约";
 			}
 			
-			s += String.format("%-11d%-13s%-13s%-13s%-9s%-10s%-10s%s\n",s1.rs.getInt("r_id"),s1.rs.getString("student"),date,s1.rs.getString("begintime"),s1.rs.getString("finishtime"),place,state);
+			s += String.format("%-11d%-13s%-13s%-13s%-9s%-10s%-10s%s\n",r.id,r.student,date,r.begintime,s1.rs.r.finishtime,place,state);
 			}
 		}
 		return s;
