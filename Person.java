@@ -1,3 +1,5 @@
+
+
 package action;
 
 
@@ -10,14 +12,30 @@ import connect.sqlAction;
 
 public class Person {
 
-	Person(){
+	Person(String id){
+		this.id = id;
 		
+		String command = "SELECT name,information FROM "+ getType(this.id) +"WHERE ID = '" + this.id+"';";
+
+		sqlAction s = new sqlAction();
+		s.executeSQL(command);
+		name = s.rs.getString("name");
+		info = s.rs.getString("information");
 	}
 	Person(String id,String password){
 
 		this.id = id;
 
 		this.password = password;
+		
+		String command = "SELECT name,information FROM "+ getType(this.id) +"WHERE ID = '" + this.id+"';";
+
+		sqlAction s = new sqlAction();
+		
+		s.executeSQL(command);
+
+		name = s.rs.getString("name");
+		info = s.rs.getString("information");
 
 	}
 
@@ -28,6 +46,8 @@ public class Person {
 	public String password;
 
 	public String inputPassword;
+	
+	public String info;
 
 	public boolean testRegist() throws SQLException {
 
@@ -51,24 +71,31 @@ public class Person {
 
 	}
 
-	public void getName() throws SQLException {
+	public String getName() throws SQLException {
+		
+		return name; 
 
-		String command = "SELECT name FROM "+ getType(this.id) +"WHERE ID = '" + this.id+"';";
-
-		sqlAction.executeSQL(command);
-
-		//
-
+	}
+	
+	public String getInfo() throws SQLException{
+		return info;
 	}
 
 	public void setInfo(String info) throws SQLException {
 
-		String command = "UPDATE "+ getType(this.id) +"SET information ='"+info+"' WHERE ID = '" + this.id+"';";
+		String command = "UPDATE "+ getType(this.id) +"SET information ='"+info+"' WHERE id = '" + this.id+"';";
 
 		sqlAction.executeSQL(command);
 
 	}
 
+	public void setName(String name){
+		String command = "UPDATE" + getType(this.id)+"SET name = '"+name+"' WHERE id ='"+this.id+";";
+		sqlAction.executeSQL(command);
+	}
 	
-
+	public void setPassword(String password){
+		String command = "UPDATE" + getType(this.id)+"SET password = '"+password+"' WHERE id ='"+this.id+";";
+		sqlAction.executeSQL(command);
+	}
 }
