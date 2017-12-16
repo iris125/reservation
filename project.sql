@@ -7,9 +7,9 @@ INSERT INTO administrator values('a000001','admin1','100001');
 INSERT INTO administrator values('a000002','admin1','100002');
 
 CREATE TABLE teacher(
-  t_id char(7) not null PRIMARY KEY,
-  t_name text,
-  t_password text,
+  id char(7) not null PRIMARY KEY,
+  name text,
+  password text,
   introduction text DEFAULT NULL,
   address text DEFAULT NULL,
   maxunllnum int DEFAULT 10000,
@@ -17,9 +17,9 @@ CREATE TABLE teacher(
   maxtimeOfMonth int DEFAULT 10000);
   
 CREATE TABLE student(
-  s_id char(7) not null PRIMARYKEY;
-  s_name text,
-  s_password text DEFAULT NULL,
+  id char(7) not null PRIMARYKEY,
+  name text,
+  password text DEFAULT NULL,
   introduction text DEFAULT NULL);
   
  CREATE TABLE reservation(
