@@ -1,3 +1,4 @@
+
 CREATE DATABASE project;
 CREATE TABLE administrator(
   admin_id char(7) not null PRIMARY KEY,
@@ -43,3 +44,5 @@ CREATE TABLE setting(
    id int auto-INCREMENT PRIMARY KEY,
    maxVaildNum int,
    minRegretDate int);
+   
+INSERT INTO setting(maxVaildNum,minRegretDate) values (1,5);
